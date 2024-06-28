@@ -1,9 +1,6 @@
 package cl.AlkeWalletM6.AlkeWalletM6.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -16,6 +13,7 @@ public class Transaction {
     private Long userId;
     private BigDecimal amount;
     private String transactionType;
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp timestamp;
 
     // getters and setters

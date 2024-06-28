@@ -7,6 +7,7 @@ import cl.AlkeWalletM6.AlkeWalletM6.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ public class TransactionController {
         model.addAttribute("transactions", transactions);
         model.addAttribute("balance", balance);
 
-        transactions.forEach(t -> System.out.println(t.getAmount() + " - " + t.getTransactionType() + " - " + t.getAmount() + " - " + t.getUserId()));
+        transactions.forEach(t -> System.out.println(t.getAmount() + " aaaaaaaaaaaa " + t.getTransactionType() + " - " + t.getAmount() + " - " + t.getUserId()));
 
         return "home";
     }

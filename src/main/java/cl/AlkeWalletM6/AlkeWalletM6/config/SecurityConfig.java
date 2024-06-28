@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/error").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin ->
                         formLogin
@@ -35,11 +36,13 @@ public class SecurityConfig {
                                 .permitAll())
                 .logout(logout ->
                         logout
-                                .logoutUrl("/logout")
-                                .logoutSuccessUrl("/login?logout")
-                                .invalidateHttpSession(true)
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))//define la URL de cierre
+                                .logoutSuccessUrl("/login?logout")//redirige al login?logout
+                                .invalidateHttpSession(true)//invalida la session HTTP
+                                .clearAuthentication(true)// limpia la auteticacion
                                 .deleteCookies("JSESSIONID"))
-                //.csrf().disable() // You can enable CSRF protection if needed
-                .build();
+
+                //.csrf(csrf -> csrf.disable()) // deshabilita la proteccion csrf que nose que es xd
+                .build();//construye y retorna el objeto HttpSecurity configurado
     }
 }
