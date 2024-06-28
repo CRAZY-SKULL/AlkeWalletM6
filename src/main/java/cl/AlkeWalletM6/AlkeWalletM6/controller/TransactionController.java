@@ -1,14 +1,13 @@
 package cl.AlkeWalletM6.AlkeWalletM6.controller;
 
-import org.springframework.ui.Model;
 import cl.AlkeWalletM6.AlkeWalletM6.model.Transaction;
 import cl.AlkeWalletM6.AlkeWalletM6.model.User;
 import cl.AlkeWalletM6.AlkeWalletM6.service.TransactionService;
 import cl.AlkeWalletM6.AlkeWalletM6.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -52,5 +51,13 @@ public class TransactionController {
         User recipient = userService.findByUsername(recipientUsername);
         transactionService.send(sender.getId(), recipient.getId(), amount);
         return "redirect:/home";
+    }
+
+    @GetMapping("/balance")
+    public String showBalance(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        BigDecimal balance = transactionService.calculateBalance(user.getId());
+        model.addAttribute("balance", balance);
+        return "home";
     }
 }

@@ -67,20 +67,48 @@ public class TransactionService {
     }
 
     private boolean hasEnoughFunds(User user, BigDecimal amount) {
-        // Implementa la lógica para calcular el balance del usuario a partir de sus transacciones
         List<Transaction> transactions = transactionRepository.findByUserId(user.getId());
         BigDecimal balance = BigDecimal.ZERO;
+
         for (Transaction transaction : transactions) {
-            if (transaction.getTransactionType().equals("deposit")) {
-                balance = balance.add(transaction.getAmount());
-            } else if (transaction.getTransactionType().equals("withdraw")) {
-                balance = balance.subtract(transaction.getAmount());
-            } else if (transaction.getTransactionType().equals("send")) {
-                balance = balance.subtract(transaction.getAmount());
-            } else if (transaction.getTransactionType().equals("receive")) {
-                balance = balance.add(transaction.getAmount());
+            switch (transaction.getTransactionType()) {
+                case "deposit":
+                case "receive":
+                    balance = balance.add(transaction.getAmount());
+                    break;
+                case "withdraw":
+                case "send":
+                    balance = balance.subtract(transaction.getAmount());
+                    break;
+                default:
+                    // Handle unexpected transaction types if needed
+                    break;
             }
         }
+
         return balance.compareTo(amount) >= 0;
+    }
+
+    public BigDecimal calculateBalance(Long userId) {
+        List<Transaction> transactions = transactionRepository.findByUserId(userId);
+        BigDecimal balance = BigDecimal.ZERO;
+
+        for (Transaction transaction : transactions) {
+            switch (transaction.getTransactionType()) {
+                case "deposit":
+                case "receive":
+                    balance = balance.add(transaction.getAmount());
+                    break;
+                case "withdraw":
+                case "send":
+                    balance = balance.subtract(transaction.getAmount());
+                    break;
+                default:
+                    // Handle unexpected transaction types if needed
+                    break;
+            }
+        }
+
+        return balance;
     }
 }
