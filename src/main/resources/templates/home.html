@@ -110,6 +110,7 @@
                 <tbody>
                 <tr th:each="transaction : ${transactions}">
                     <td th:text="${transaction.transactionType}">Type</td>
+                    <td >HOLA PERRAS</td>
                     <td th:text="${transaction.amount}">Amount</td>
                     <td th:text="${#temporals.format(transaction.timestamp, 'yyyy-MM-dd HH:mm:ss')}">Date</td>
                 </tr>
@@ -119,10 +120,10 @@
     </div>
 
     <div class="balance">
-        Saldo actual: <span th:text="${balance}"></span>
+        Saldo actual: <span th:text="${balance}">no me sale :c</span>
     </div>
 
-    <a th:href="@{/login?logout}" class="logout-link btn btn-secondary btn-block">Logout</a>
+    <a th:href="@{/logout}" class="logout-link btn btn-secondary btn-block">Logout</a>
 </div>
 
 </body>

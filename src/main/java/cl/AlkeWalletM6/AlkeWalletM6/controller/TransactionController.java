@@ -23,13 +23,21 @@ public class TransactionController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String listTransactions(Model model, Principal principal) {
+    @GetMapping("/home")
+    public String home(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         List<Transaction> transactions = transactionService.findByUserId(user.getId());
+        BigDecimal balance = transactionService.calculateBalance(user.getId());
+
+        model.addAttribute("user", user);
         model.addAttribute("transactions", transactions);
+        model.addAttribute("balance", balance);
+
+        transactions.forEach(t -> System.out.println(t.getAmount() + " - " + t.getTransactionType() + " - " + t.getAmount() + " - " + t.getUserId()));
+
         return "home";
     }
+
 
     @PostMapping("/deposit")
     public String deposit(@RequestParam("amount") BigDecimal amount, Principal principal) {
@@ -53,11 +61,4 @@ public class TransactionController {
         return "redirect:/home";
     }
 
-    @GetMapping("/balance")
-    public String showBalance(Model model, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
-        BigDecimal balance = transactionService.calculateBalance(user.getId());
-        model.addAttribute("balance", balance);
-        return "home";
-    }
 }
